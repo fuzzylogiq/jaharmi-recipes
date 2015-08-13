@@ -30,11 +30,11 @@ BASE_URL = "".join([
     '/jdk7-downloads-1880260.html',
 ])
 
-# URL to find the Java 7 JDK download cookie
-cookie_source_url = "".join([
-    'http://stackoverflow.com/questions/10268583/how-to-automate-',
-    'download-and-instalation-of-java-jdk-on-linux',
-])
+# # URL to find the Java 7 JDK download cookie
+# cookie_source_url = "".join([
+    # 'http://stackoverflow.com/questions/10268583/how-to-automate-',
+    # 'download-and-instalation-of-java-jdk-on-linux',
+# ])
 
 # ['jdk-7u40-macosx-x64.dmg'] = { "title":"Mac OS X x64", "size":"183.35 MB",
 # "filepath":"http://download.oracle.com/otn-pub/java/jdk/7u40-b43/jdk-7u40-macosx-x64.dmg"};
@@ -62,38 +62,38 @@ class OracleJava7JDKURLProvider(Processor):
     }
     description = __doc__
 
-    def get_java_download_cookie(self, cookie_source_url):
-        """"Find a string representing the cookie that allows for the Java 7 JDK
-        download to proceed."""
+    # def get_java_download_cookie(self, cookie_source_url):
+        # """"Find a string representing the cookie that allows for the Java 7 JDK
+        # download to proceed."""
 
-        # Create a regular expression object to match the working cookie string
-        # The "cookie" named group within the pattern is the string of interest
-        download_cookie_string = re.compile(
-            r'--header \"Cookie: '
-            r'(?P<cookie>g.+\.com)\"'
-        )
+        # # Create a regular expression object to match the working cookie string
+        # # The "cookie" named group within the pattern is the string of interest
+        # download_cookie_string = re.compile(
+            # r'--header \"Cookie: '
+            # r'(?P<cookie>g.+\.com)\"'
+        # )
 
-        # Request the URL that shows a working cookie string
-        # and read the resulting HTML page
-        try:
-            opener = urllib2.build_opener()
-            f = opener.open(cookie_source_url)
-            html = f.read()
-            f.close()
-        except BaseException as err:
-            raise ProcessorError("Can't download %s: %s" % (cookie_source_url, err))
+        # # Request the URL that shows a working cookie string
+        # # and read the resulting HTML page
+        # try:
+            # opener = urllib2.build_opener()
+            # f = opener.open(cookie_source_url)
+            # html = f.read()
+            # f.close()
+        # except BaseException as err:
+            # raise ProcessorError("Can't download %s: %s" % (cookie_source_url, err))
 
-        # Search the HTML for the cookie string regular expression
-        m = download_cookie_string.search(html)
+        # # Search the HTML for the cookie string regular expression
+        # m = download_cookie_string.search(html)
 
-        # If nothing matches the regular expression, raise an exception
-        # Otherwise, find get the named group "cookie" from the regular expression
-        # match and return that
-        if not m:
-            raise ProcessorError(
-                "Couldn't find cookie string in %s" % cookie_source_url)
-        download_cookie = m.group("cookie")
-        return download_cookie
+        # # If nothing matches the regular expression, raise an exception
+        # # Otherwise, find get the named group "cookie" from the regular expression
+        # # match and return that
+        # if not m:
+            # raise ProcessorError(
+                # "Couldn't find cookie string in %s" % cookie_source_url)
+        # download_cookie = m.group("cookie")
+        # return download_cookie
 
     def get_java_dmg_url(self, base_url):
         """Finds a download URL for latest Oracle Java 7 JDK release."""
@@ -141,11 +141,11 @@ class OracleJava7JDKURLProvider(Processor):
         """Find and return a download URL along with needed request headers."""
 
         # Find the cookie string needed for the download
-        download_cookie = self.get_java_download_cookie(cookie_source_url)
+        # download_cookie = self.get_java_download_cookie(cookie_source_url)
 
         # Add the cookie string the the request headers that will be passed to the
         # next step in the Processor for use during the actual JDK file download
-        self.env["request_headers"] = {'Cookie': download_cookie}
+        self.env["request_headers"] = {'Cookie': "oraclelicense=accept-securebackup-cookie" }
 
         # Get the base URL and then use it it find the file download URL
         base_url = self.env.get("base_url", BASE_URL)
